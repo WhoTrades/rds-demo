@@ -1,0 +1,67 @@
+version: '2'
+services:
+  postgres:
+    image: 'postgres:13-alpine'
+    environment:
+      - POSTGRES_PASSWORD=rds
+      - POSTGRES_USER=rds
+    volumes:
+      - 'dbdata:/var/lib/postgresql/data'
+      - './rds.sql:/docker-entrypoint-initdb.d/rds.sql'
+    ports:
+      - '5432:5432'
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
+  nginx:
+    image: nginx
+    volumes:
+      - 'rds:/var/www/rds'
+      - 'app:/var/www/app'
+      - 'app-pkg:/var/pkg'
+      - './nginx/rds.conf:/etc/nginx/conf.d/rds.conf'
+      - './nginx/demo-application.conf:/etc/nginx/conf.d/demo-application.conf'
+    ports:
+      - '8080:8080'
+      - '8000:8000'
+    depends_on:
+      - service-rds
+      - service-websocket
+      - demo-application
+  service-rds:
+    image: 'whotrades/service-rds:1.0.0'
+    volumes:
+      - 'rds:/var/www/rds'
+      - './config.local.dist:/var/www/rds/config.local.php'
+    ports:
+      - '9000:9000'
+    depends_on:
+      - service-websocket
+      - rabbitmq
+      - postgres
+  service-build-agent:
+    image: 'whotrades/service-build-agent:1.0.0'
+    volumes:
+      - './config.local.build-agent.dist:/var/www/rds-build-agent/config.local.php'
+    depends_on:
+      - rabbitmq
+      - postgres
+  service-websocket:
+    image: 'whotrades/service-websocket:1.0.0'
+    ports:
+      - '5554:5554'
+      - '8081:8081'
+  demo-application:
+    image: 'whotrades/demo-application:1.0.0'
+    ports:
+      - '9090:9000'
+      - '2022:22'
+    volumes:
+    - 'app:/var/www/app'
+    - 'app-pkg:/var/pkg'
+volumes:
+  dbdata:
+  rds:
+  app:
+  app-pkg:

@@ -1,0 +1,11 @@
+<?php
+/** @var array $config */
+$config['components']['db']['dsn'] = 'pgsql:host=postgres;port=5432;dbname=rds';
+
+$config['params']['messaging']['host'] = 'rabbitmq';
+$config['params']['messaging']['user'] = 'guest';
+$config['params']['messaging']['pass'] = 'guest';
+
+$config['components']['webSockets']['zmqLocations'] = [
+    'tcp://service-websocket:5554',
+];

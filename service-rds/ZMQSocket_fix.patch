@@ -1,0 +1,26 @@
+Index: src/extensions/WebSockets/WebSockets.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/extensions/WebSockets/WebSockets.php	(revision 4128513a19344dafba27420082ccd7bec391ebd7)
++++ src/extensions/WebSockets/WebSockets.php	(date 1607339289575)
+@@ -26,7 +26,8 @@
+     {
+         foreach ($this->zmqLocations as $location) {
+             $context = new ZMQContext();
+-            $this->sockets[$location] = $context->getSocket(ZMQ::SOCKET_PUSH)->setSockOpt(ZMQ::SOCKOPT_LINGER, 0);
++            $this->sockets[$location] = $context->getSocket(ZMQ::SOCKET_PUSH);
++            $this->sockets[$location]->setSockOpt(ZMQ::SOCKOPT_LINGER, 0);
+         }
+     }
+
+@@ -101,7 +102,7 @@
+ };
+
+ ab.connect(
+-   'wss://'+document.location.host+'$this->server',
++   'ws://'+document.location.host+'$this->server',
+    function (session) {
+         webSocketSession.session = session;
+         webSocketSession.resubscribe();

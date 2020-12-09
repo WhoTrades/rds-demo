@@ -1,0 +1,8 @@
+<?php
+/** @var array $config */
+$config = require(__DIR__ . "/src/config/console.php");
+$config['params']['messaging']['host'] = 'rabbitmq';
+$config['params']['messaging']['user'] = 'guest';
+$config['params']['messaging']['pass'] = 'guest';
+
+return $config;

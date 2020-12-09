@@ -1,0 +1,16 @@
+{
+  "name": "whotrades/service-websocket",
+  "description": "Simple websocket server for rds",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maksim Rodikov",
+      "email": "maxrodikov@gmail.com"
+    }
+  ],
+  "require": {
+    "cboden/ratchet": "~v0.4.3",
+    "react/zmq": "~v0.4.0"
+  }
+}
